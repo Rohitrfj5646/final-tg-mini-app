@@ -95,9 +95,12 @@ const App = {
       }
     } catch (err) {
       console.error('Login error:', err);
+      this.hideLoading(); // FIX: Hide loading screen on error
+      this.showAuthScreen(); // Show auth screen instead
       this.showToast('Login failed: ' + err.message, 'error');
       const btn = document.getElementById('auth-btn');
       if (btn) { btn.textContent = '🚀 Continue with Telegram'; btn.disabled = false; }
+      throw err; // Rethrow so init() knows it failed
     }
   },
 
