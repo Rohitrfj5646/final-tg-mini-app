@@ -1,0 +1,67 @@
+// ================================================
+// FIREBASE FIRESTORE SECURITY RULES
+// Go to: Firebase Console → Firestore → Rules
+// Copy and paste this entire block
+// ================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- USERS ----
+    match /users/{userId} {
+      // Users can only read/write their own document
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      // Create via backend (Admin SDK) only — no direct client create
+      allow create: if false;
+      allow delete: if false;
+    }
+
+    // ---- SIGNALS ----
+    match /signals/{signalId} {
+      // Any authenticated user can read signals
+      allow read: if request.auth != null;
+      // Only admin can write (via backend)
+      allow write: if false;
+    }
+
+    // ---- TRADES ----
+    match /trades/{tradeId} {
+      // Users can read only their own trades
+      allow read: if request.auth != null &&
+        request.auth.uid == resource.data.userId;
+      // No direct writes from client
+      allow write: if false;
+    }
+
+    // ---- TRANSACTIONS ----
+    match /transactions/{txId} {
+      // Users can read only their own transactions
+      allow read: if request.auth != null &&
+        request.auth.uid == resource.data.userId;
+      allow write: if false;
+    }
+
+    // ---- NEWS ----
+    match /news/{newsId} {
+      // Any authenticated user can read published news
+      allow read: if request.auth != null &&
+        resource.data.published == true;
+      allow write: if false;
+    }
+
+    // ---- SETTINGS ----
+    match /settings/{key} {
+      // Public read for non-sensitive settings
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // ---- SUBSCRIBERS (Bot subscribers) ----
+    match /subscribers/{subId} {
+      allow read: if false; // Backend only
+      allow write: if false;
+    }
+
+  }
+}
