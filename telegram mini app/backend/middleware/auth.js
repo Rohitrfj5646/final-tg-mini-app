@@ -18,9 +18,10 @@ function validateTelegramData(initData) {
       .map(([key, value]) => `${key}=${value}`)
       .join('\n');
 
+    const botToken = (process.env.TELEGRAM_BOT_TOKEN || 'test_token').trim();
     const secretKey = crypto
       .createHmac('sha256', 'WebAppData')
-      .update(process.env.TELEGRAM_BOT_TOKEN || 'test_token')
+      .update(botToken)
       .digest();
 
     const computedHash = crypto
@@ -28,7 +29,10 @@ function validateTelegramData(initData) {
       .update(dataCheckString)
       .digest('hex');
 
-    if (computedHash !== hash) return null;
+    if (computedHash !== hash) {
+      console.warn('Telegram auth failed: Hash mismatch', { computedHash, receivedHash: hash });
+      return null;
+    }
 
     const userStr = urlParams.get('user');
     if (!userStr) return null;

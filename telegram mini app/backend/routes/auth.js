@@ -69,7 +69,7 @@ router.post('/telegram', async (req, res) => {
         .single();
 
       if (error) {
-        console.error('Create user error:', error);
+        console.error('❌ Create user error (Supabase):', error);
         return res.status(500).json({ success: false, message: 'Failed to create user: ' + error.message });
       }
 

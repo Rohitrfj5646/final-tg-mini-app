@@ -1,4 +1,18 @@
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+
+try {
+  // Load local .env first if it exists
+  require('dotenv').config({ path: path.join(__dirname, '.env') });
+} catch(e) {}
+
+// Fallback for Vercel: Load from JS directly so it bundles permanently 
+const secrets = require('./env-secrets.js');
+for (const key in secrets) {
+  if (!process.env[key]) {
+    process.env[key] = secrets[key];
+  }
+}
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -35,7 +49,10 @@ app.use(cors({
       origin.endsWith('.ngrok-free.app') || 
       origin.endsWith('.ngrok.io') ||
       origin.endsWith('.replit.app') ||
-      origin.endsWith('.replit.dev')
+      origin.endsWith('.replit.dev') ||
+      origin.endsWith('.onrender.com') ||
+      origin.endsWith('.up.railway.app') ||
+      origin.endsWith('.vercel.app')
     ) {
       return callback(null, true);
     }
@@ -108,16 +125,18 @@ app.get('/', (req, res) => {
 });
 
 // ================================================
-// START
+// START - Modified for Vercel Serverless
 // ================================================
-app.listen(PORT, () => {
-  const ngrok = process.env.NGROK_URL || '<your-ngrok-url>';
-  console.log(`\n🚀 CryptoSignal Pro Backend — Port ${PORT}`);
-  console.log(`📡 Health:   http://localhost:${PORT}/api/health`);
-  console.log(`🗄️  Database: Supabase @ ${process.env.SUPABASE_URL}`);
-  console.log(`🌍 Env:      ${process.env.NODE_ENV || 'development'}`);
-  console.log(`\n🤖 Telegram Webhook URL (set via BotFather):`);
-  console.log(`   ${ngrok}/api/webhook/telegram\n`);
-});
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+  app.listen(PORT, () => {
+    const ngrok = process.env.NGROK_URL || '<your-ngrok-url>';
+    console.log(`\n🚀 CryptoSignal Pro Backend — Port ${PORT}`);
+    console.log(`📡 Health:   http://localhost:${PORT}/api/health`);
+    console.log(`🗄️  Database: Supabase @ ${process.env.SUPABASE_URL}`);
+    console.log(`🌍 Env:      ${process.env.NODE_ENV || 'development'}`);
+    console.log(`\n🤖 Telegram Webhook URL (set via BotFather):`);
+    console.log(`   ${ngrok}/api/webhook/telegram\n`);
+  });
+}
 
 module.exports = app;

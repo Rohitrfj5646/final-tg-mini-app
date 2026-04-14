@@ -1,0 +1,13 @@
+module.exports = {
+  "PORT": "5000",
+  "NODE_ENV": "production",
+  "JWT_SECRET": "CryptoSignalPro_JWT_Secret_Change_This_2024!",
+  "SUPABASE_URL": "https://rtbrvermdoffizzcjdvc.supabase.co",
+  "SUPABASE_ANON_KEY": "sb_publishable_9wQEO8mV3QaaMBiZU8Rp2w_gvIV4dyP",
+  "SUPABASE_SERVICE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnJ2ZXJtZG9mZml6emNqZHZjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTg4NTYzMSwiZXhwIjoyMDkxNDYxNjMxfQ.3YIVYCP94h8Tj0Azfsl0pfc4IXQh-yD5e4rfDqzRee4",
+  "TELEGRAM_BOT_TOKEN": "8726332553:AAGKFAHsIhZ2M9zu7BfR-Mifv23a5vgbvls",
+  "TELEGRAM_BOT_USERNAME": "Adclassic_bot",
+  "ADMIN_USERNAME": "admin",
+  "ADMIN_PASSWORD": "Admin@TradingApp2024",
+  "ADMIN_JWT_SECRET": "AdminSecret_CryptoSignal_2024!"
+};

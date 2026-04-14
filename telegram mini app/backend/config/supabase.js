@@ -11,7 +11,7 @@ function initSupabase() {
 
   if (!url || !anonKey) {
     console.error('❌ SUPABASE_URL and SUPABASE_ANON_KEY are required in .env');
-    process.exit(1);
+    return null;
   }
 
   // Admin client — uses service_role key (bypasses RLS)
