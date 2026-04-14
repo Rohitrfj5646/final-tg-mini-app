@@ -14,7 +14,8 @@ router.post('/telegram', async (req, res) => {
 
     let telegramUser;
 
-    if (testMode && process.env.NODE_ENV !== 'production') {
+    if (testMode) {
+      // Demo Mode applies independent of environment so users can test the app
       telegramUser = {
         id: 999999999,
         first_name: 'Demo',
